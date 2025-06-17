@@ -11,7 +11,7 @@ from fastmcp import FastMCP, Context
 
 from pydantic import Field
 from rich import print as print
-from frankfurtermcp.common import EnvironmentVariables, parse_env
+from frankfurtermcp.common import parse_env, EnvironmentVariables
 
 from frankfurtermcp.common import package_metadata, frankfurter_api_url
 
@@ -378,16 +378,8 @@ def main():
         f"[green]Initiating startup[/green] of [bold]{package_metadata['Name']} {package_metadata['Version']}[/bold], [red]press CTRL+C to exit...[/red]"
     )
     # TODO: Should this be forked as a separate process, to which we can send the SIGTERM signal?
-    app.run(
-        transport=parse_env(
-            EnvironmentVariables.MCP_SERVER_TRANSPORT,
-            default_value=EnvironmentVariables.DEFAULT__MCP_SERVER_TRANSPORT,
-            allowed_values=EnvironmentVariables.ALLOWED__MCP_SERVER_TRANSPORT,
-        ),
-        uvicorn_config={
-            "timeout_graceful_shutdown": 5,  # seconds
-        },
-    )
+    # Run with stdio transport only
+    app.run()
 
 
 if __name__ == "__main__":

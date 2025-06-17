@@ -19,9 +19,10 @@ class EnvironmentVariables:
     List of environment variables used in this project.
     """
 
-    MCP_SERVER_TRANSPORT = "MCP_SERVER_TRANSPORT"
-    DEFAULT__MCP_SERVER_TRANSPORT = "streamable-http"
-    ALLOWED__MCP_SERVER_TRANSPORT = ["stdio", "sse", "streamable-http"]
+    # Transport configuration removed - using stdio only
+    # MCP_SERVER_TRANSPORT = "MCP_SERVER_TRANSPORT"
+    # DEFAULT__MCP_SERVER_TRANSPORT = "stdio"
+    # ALLOWED__MCP_SERVER_TRANSPORT = ["stdio"]
 
     FRANKFURTER_API_URL = "FRANKFURTER_API_URL"
     DEFAULT__FRANKFURTER_API_URL = "https://api.frankfurter.dev/v1"
@@ -119,44 +120,17 @@ frankfurter_api_url = parse_env(
 )
 
 
-def get_nonstdio_transport_endpoint() -> str:
-    """
-    Get the transport endpoint for the non-stdio MCP client based on environment variables.
-    """
-    transport_type = parse_env(
-        EnvironmentVariables.MCP_SERVER_TRANSPORT,
-        default_value=EnvironmentVariables.DEFAULT__MCP_SERVER_TRANSPORT,
-        allowed_values=EnvironmentVariables.ALLOWED__MCP_SERVER_TRANSPORT,
-    )
-    transport_endpoint = None
-    server_host = parse_env(
-        "FASTMCP_HOST",
-        default_value="localhost",
-    )
-    server_port = parse_env(
-        "FASTMCP_PORT",
-        default_value=8000,
-        type_cast=int,
-    )
-    if transport_type == "streamable-http":
-        transport_endpoint = f"http://{server_host}:{server_port}/mcp"
-    elif transport_type == "sse":
-        transport_endpoint = f"http://{server_host}:{server_port}/sse"
-    else:
-        raise ValueError(
-            f"Unsupported transport type: {transport_type}. "
-            "Allowed values are for this type of client are only sse and streamable-http: "
-        )
-    return transport_endpoint
+# Function removed - stdio transport only
+# def get_nonstdio_transport_endpoint() -> str:
+#     """
+#     Get the transport endpoint for the non-stdio MCP client based on environment variables.
+#     """
+#     raise NotImplementedError("Non-stdio transports are no longer supported. Use stdio transport only.")
 
 
-def get_nonstdio_mcp_client() -> Client:
-    """
-    Create and return a non-stdio MCP client to connect to built-in server based on the environment variables.
-    """
-    transport_endpoint = get_nonstdio_transport_endpoint()
-    mcp_client = Client(
-        transport=transport_endpoint,
-        timeout=60,
-    )
-    return mcp_client
+# Function removed - stdio transport only
+# def get_nonstdio_mcp_client() -> Client:
+#     """
+#     Create and return a non-stdio MCP client to connect to built-in server based on the environment variables.
+#     """
+#     raise NotImplementedError("Non-stdio transports are no longer supported. Use stdio transport only.")
