@@ -1,9 +1,7 @@
 import signal
 import sys
 from fastmcp import FastMCP
-from frankfurtermcp.common import EnvironmentVariables
 from frankfurtermcp.server import app as frankfurtermcp
-from frankfurtermcp.common import parse_env
 from dotenv import load_dotenv
 
 app = FastMCP(
@@ -53,16 +51,8 @@ def main():
     signal.signal(signal.SIGINT, sigint_handler)
 
     app.mount(prefix=COMPOSITION_PREFIX, server=frankfurtermcp, as_proxy=False)
-    app.run(
-        transport=parse_env(
-            EnvironmentVariables.MCP_SERVER_TRANSPORT,
-            default_value=EnvironmentVariables.DEFAULT__MCP_SERVER_TRANSPORT,
-            allowed_values=EnvironmentVariables.ALLOWED__MCP_SERVER_TRANSPORT,
-        ),
-        uvicorn_config={
-            "timeout_graceful_shutdown": 5,  # seconds
-        },
-    )
+    # Run with stdio transport only
+    app.run()
 
 
 if __name__ == "__main__":

@@ -4,17 +4,15 @@ env:
   FASTMCP_HOST: "0.0.0.0"
   FASTMCP_DEBUG: "False"
   FASTMCP_LOG_LEVEL: "INFO"
-  # FASTMCP_PORT will be picked up from the PORT environment variable set by Smithery
-  MCP_SERVER_TRANSPORT: "streamable-http"
+  MCP_SERVER_TRANSPORT: "stdio"  # Changed from streamable-http
 build:
   dockerfile: "smithery.dockerfile"
   dockerBuildPath: "."
 startCommand:
-  type: "http"
+  type: "stdio"  # Changed from http
   configSchema:
     type: "object"
-    properties:
-      apiKey:
-        type: "string"
-        description: "Unused API key"
+    properties: {}
     required: []
+  commandFunction: |
+    (config) => ({ command: 'python', args: ['-m', 'frankfurtermcp.server'] })

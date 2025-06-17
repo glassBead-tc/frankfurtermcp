@@ -12,5 +12,5 @@ WORKDIR /home/app_user/app
 # Install the latest version as available on PyPI
 RUN pip install --upgrade pip && pip install --no-cache-dir frankfurtermcp
 
-ENTRYPOINT ["sh", "-c"]
-CMD ["PORT=${PORT} FASTMCP_PORT=${PORT} python -m frankfurtermcp.server"]
+# For stdio transport, we need a direct entrypoint
+ENTRYPOINT ["python", "-m", "frankfurtermcp.server"]
